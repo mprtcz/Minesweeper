@@ -16,7 +16,7 @@ public class GameTest {
         MinesweeperImpl minesweeperImpl = new MinesweeperImpl();
         String correctTestString = "1234\n4567\n8901";
         try {
-            minesweeperImpl.checkParamCorectness(MinesweeperImpl.getMineFieldLines(correctTestString));
+            minesweeperImpl.checkParamCorrectness(MinesweeperImpl.getMineFieldLines(correctTestString));
         } catch (IllegalArgumentException iaEx) {
             assertEquals(null, iaEx);
         }
@@ -30,7 +30,7 @@ public class GameTest {
         MinesweeperImpl minesweeperImpl = new MinesweeperImpl();
         String incorrectTestString = "1234\n4567\n801";
         expectedException.expect(IllegalArgumentException.class);
-        minesweeperImpl.checkParamCorectness(MinesweeperImpl.getMineFieldLines(incorrectTestString));
+        minesweeperImpl.checkParamCorrectness(MinesweeperImpl.getMineFieldLines(incorrectTestString));
     }
 
     @Test
@@ -38,7 +38,7 @@ public class GameTest {
         MinesweeperImpl minesweeperImpl = new MinesweeperImpl();
         String incorrectTestString = "";
         expectedException.expect(IllegalArgumentException.class);
-        minesweeperImpl.checkParamCorectness(MinesweeperImpl.getMineFieldLines(incorrectTestString));
+        minesweeperImpl.checkParamCorrectness(MinesweeperImpl.getMineFieldLines(incorrectTestString));
     }
 
     @Test

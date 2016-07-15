@@ -7,18 +7,18 @@ import java.util.List;
 /**
  * Created by Azet on 2016-07-14.
  */
-public class MinesweeperImpl {
+class MinesweeperImpl {
     private char[][] minesArray;
 
-    public void setMineField(String mineField) throws IllegalArgumentException {
+    void setMineField(String mineField) throws IllegalArgumentException {
 
-        checkParamCorectness(getMineFieldLines(mineField));
+        checkParamCorrectness(getMineFieldLines(mineField));
 
         setMineFieldCharArray(getMineFieldLines(mineField));
 
     }
 
-    public String getHintField() throws IllegalStateException {
+    String getHintField() throws IllegalStateException {
         return generateStringFromCharArray();
     }
 
@@ -26,7 +26,7 @@ public class MinesweeperImpl {
         return mineField.split("\n");
     }
 
-    void checkParamCorectness(String[] mineFieldLines) {
+    void checkParamCorrectness(String[] mineFieldLines) {
         int lineSize = mineFieldLines[0].length();
 
         if (mineFieldLines.length < 2 || lineSize < 2) {
@@ -66,16 +66,16 @@ public class MinesweeperImpl {
         for (int i = 0; i < minesArray.length; i++) {
             char[] line = minesArray[i];
             for (int j = 0; j < line.length; j++) {
-                stringRepresentation.append(calcuateNeighbors(i, j));
+                stringRepresentation.append(calculateNeighbors(i, j));
             }
             stringRepresentation.append("\n");
         }
-        stringRepresentation.deleteCharAt(stringRepresentation.length()-1);
+        stringRepresentation.deleteCharAt(stringRepresentation.length() - 1);
 
         return stringRepresentation.toString();
     }
 
-    private String calcuateNeighbors(int i, int j) {
+    private String calculateNeighbors(int i, int j) {
 
         if (minesArray[i][j] == '*') {
             return "*";
@@ -83,33 +83,33 @@ public class MinesweeperImpl {
 
         List<Coordinates> coordinatesList = getCoordinatesList(i, j);
 
-        int amountOfNieghboringMines = 0;
+        int amountOfAdjacentMines = 0;
         for (Coordinates c : coordinatesList) {
             try {
                 if (minesArray[c.getI()][c.getJ()] == '*') {
-                    amountOfNieghboringMines++;
+                    amountOfAdjacentMines++;
                 }
             } catch (IndexOutOfBoundsException ignored) {
             }
         }
 
-        return String.valueOf(amountOfNieghboringMines);
+        return String.valueOf(amountOfAdjacentMines);
     }
 
     private class Coordinates {
         int i;
         int j;
 
-        public Coordinates(int i, int j) {
+        Coordinates(int i, int j) {
             this.i = i;
             this.j = j;
         }
 
-        public int getI() {
+        int getI() {
             return i;
         }
 
-        public int getJ() {
+        int getJ() {
             return j;
         }
     }
@@ -117,12 +117,12 @@ public class MinesweeperImpl {
     private List<Coordinates> getCoordinatesList(int i, int j) {
         List<Coordinates> coordinatesList = new ArrayList<>();
         coordinatesList.add(new Coordinates(i - 1, j - 1));
-        coordinatesList.add(new Coordinates(i    , j - 1));
+        coordinatesList.add(new Coordinates(i, j - 1));
         coordinatesList.add(new Coordinates(i + 1, j - 1));
-        coordinatesList.add(new Coordinates(i - 1,      j));
-        coordinatesList.add(new Coordinates(i + 1,      j));
+        coordinatesList.add(new Coordinates(i - 1, j));
+        coordinatesList.add(new Coordinates(i + 1, j));
         coordinatesList.add(new Coordinates(i - 1, j + 1));
-        coordinatesList.add(new Coordinates(i    , j + 1));
+        coordinatesList.add(new Coordinates(i, j + 1));
         coordinatesList.add(new Coordinates(i + 1, j + 1));
 
         return coordinatesList;
