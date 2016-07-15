@@ -7,7 +7,7 @@ import java.util.List;
 /**
  * Created by Azet on 2016-07-14.
  */
-public class Game {
+public class MinesweeperImpl {
     private char[][] minesArray;
 
     public void setMineField(String mineField) throws IllegalArgumentException {
@@ -22,14 +22,14 @@ public class Game {
         return generateStringFromCharArray();
     }
 
-    static String[] getMineFieldLines(String mineField){
+    static String[] getMineFieldLines(String mineField) {
         return mineField.split("\n");
     }
 
-    void checkParamCorectness(String[] mineFieldLines){
+    void checkParamCorectness(String[] mineFieldLines) {
         int lineSize = mineFieldLines[0].length();
 
-        if(mineFieldLines.length<2 || lineSize < 2){
+        if (mineFieldLines.length < 2 || lineSize < 2) {
             throw new IllegalArgumentException("Arguments too short");
         }
 
@@ -40,7 +40,7 @@ public class Game {
         }
     }
 
-    private void setMineFieldCharArray(String[] mineFieldLines){
+    private void setMineFieldCharArray(String[] mineFieldLines) {
         minesArray = new char[mineFieldLines.length][mineFieldLines[0].length()];
 
         for (int i = 0; i < mineFieldLines.length; i++) {
@@ -52,12 +52,16 @@ public class Game {
     }
 
     @Override
-    public String toString(){
+    public String toString() {
         return Arrays.deepToString(minesArray);
     }
 
-    String generateStringFromCharArray(){
+    String generateStringFromCharArray() {
         StringBuilder stringRepresentation = new StringBuilder();
+
+        if (minesArray == null) {
+            throw new IllegalArgumentException("Mine field has not been initialized");
+        }
 
         for (int i = 0; i < minesArray.length; i++) {
             char[] line = minesArray[i];
@@ -66,31 +70,33 @@ public class Game {
             }
             stringRepresentation.append("\n");
         }
+        stringRepresentation.deleteCharAt(stringRepresentation.length()-1);
 
         return stringRepresentation.toString();
     }
 
-    String calcuateNeighbors(int i, int j){
+    private String calcuateNeighbors(int i, int j) {
 
-        if(minesArray[i][j]=='*'){
+        if (minesArray[i][j] == '*') {
             return "*";
         }
 
         List<Coordinates> coordinatesList = getCoordinatesList(i, j);
 
-        int amountOfNieghboringMines =0;
-        for(Coordinates c : coordinatesList){
-            try{
-            if(minesArray[c.getI()][c.getJ()]=='*'){
-                amountOfNieghboringMines++;
+        int amountOfNieghboringMines = 0;
+        for (Coordinates c : coordinatesList) {
+            try {
+                if (minesArray[c.getI()][c.getJ()] == '*') {
+                    amountOfNieghboringMines++;
+                }
+            } catch (IndexOutOfBoundsException ignored) {
             }
-            } catch (IndexOutOfBoundsException ignored){}
         }
 
         return String.valueOf(amountOfNieghboringMines);
     }
 
-    private class Coordinates{
+    private class Coordinates {
         int i;
         int j;
 
@@ -108,16 +114,16 @@ public class Game {
         }
     }
 
-    List<Coordinates> getCoordinatesList(int i, int j){
+    private List<Coordinates> getCoordinatesList(int i, int j) {
         List<Coordinates> coordinatesList = new ArrayList<>();
-        coordinatesList.add(new Coordinates(i-1, j-1));
-        coordinatesList.add(new Coordinates(i, j-1));
-        coordinatesList.add(new Coordinates(i+1, j-1));
-        coordinatesList.add(new Coordinates(i-1, j));
-        coordinatesList.add(new Coordinates(i+1, j));
-        coordinatesList.add(new Coordinates(i-1, j+1));
-        coordinatesList.add(new Coordinates(i, j+1));
-        coordinatesList.add(new Coordinates(i+1, j+1));
+        coordinatesList.add(new Coordinates(i - 1, j - 1));
+        coordinatesList.add(new Coordinates(i    , j - 1));
+        coordinatesList.add(new Coordinates(i + 1, j - 1));
+        coordinatesList.add(new Coordinates(i - 1,      j));
+        coordinatesList.add(new Coordinates(i + 1,      j));
+        coordinatesList.add(new Coordinates(i - 1, j + 1));
+        coordinatesList.add(new Coordinates(i    , j + 1));
+        coordinatesList.add(new Coordinates(i + 1, j + 1));
 
         return coordinatesList;
     }

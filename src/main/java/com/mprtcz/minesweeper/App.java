@@ -7,7 +7,7 @@ public class App {
 
     public static void main(String[] args) {
         String testString = "1*34\n4*67\n8901";
-        Game m = new Game();
+        MinesweeperImpl m = new MinesweeperImpl();
         m.setMineField(testString);
         System.out.println(m.toString());
         m.getHintField();

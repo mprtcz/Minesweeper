@@ -13,10 +13,10 @@ public class GameTest {
 
     @Test
     public void checkParamCorrectnessTest_correct() {
-        Game game = new Game();
+        MinesweeperImpl minesweeperImpl = new MinesweeperImpl();
         String correctTestString = "1234\n4567\n8901";
         try {
-            game.checkParamCorectness(Game.getMineFieldLines(correctTestString));
+            minesweeperImpl.checkParamCorectness(MinesweeperImpl.getMineFieldLines(correctTestString));
         } catch (IllegalArgumentException iaEx) {
             assertEquals(null, iaEx);
         }
@@ -27,17 +27,47 @@ public class GameTest {
 
     @Test
     public void checkParamCorrectnessTest_invalid() {
-        Game game = new Game();
+        MinesweeperImpl minesweeperImpl = new MinesweeperImpl();
         String incorrectTestString = "1234\n4567\n801";
         expectedException.expect(IllegalArgumentException.class);
-        game.checkParamCorectness(Game.getMineFieldLines(incorrectTestString));
+        minesweeperImpl.checkParamCorectness(MinesweeperImpl.getMineFieldLines(incorrectTestString));
     }
 
     @Test
     public void checkParamCorrectnessTest_emptyString() {
-        Game game = new Game();
+        MinesweeperImpl minesweeperImpl = new MinesweeperImpl();
         String incorrectTestString = "";
         expectedException.expect(IllegalArgumentException.class);
-        game.checkParamCorectness(Game.getMineFieldLines(incorrectTestString));
+        minesweeperImpl.checkParamCorectness(MinesweeperImpl.getMineFieldLines(incorrectTestString));
+    }
+
+    @Test
+    public void generateStringFromCharArrayTest_validOneMine(){
+        MinesweeperImpl minesweeperImpl = new MinesweeperImpl();
+        String correctTestString = "1234\n5*78\n9012";
+        String expectedOutput = "1110\n1*10\n1110";
+        minesweeperImpl.setMineField(correctTestString);
+        String output = minesweeperImpl.generateStringFromCharArray();
+        assertEquals(output, expectedOutput);
+    }
+
+    @Test
+    public void generateStringFromCharArrayTest_validTwoMines(){
+        MinesweeperImpl minesweeperImpl = new MinesweeperImpl();
+        String correctTestString = "1234\n5*7*\n9012";
+        String expectedOutput = "1121\n1*2*\n1121";
+        minesweeperImpl.setMineField(correctTestString);
+        String output = minesweeperImpl.generateStringFromCharArray();
+        assertEquals(output, expectedOutput);
+    }
+
+    @Test
+    public void generateStringFromCharArrayTest_validMany(){
+        MinesweeperImpl minesweeperImpl = new MinesweeperImpl();
+        String correctTestString = "***.\n****\n****";
+        String expectedOutput = "***3\n****\n****";
+        minesweeperImpl.setMineField(correctTestString);
+        String output = minesweeperImpl.generateStringFromCharArray();
+        assertEquals(output, expectedOutput);
     }
 }
