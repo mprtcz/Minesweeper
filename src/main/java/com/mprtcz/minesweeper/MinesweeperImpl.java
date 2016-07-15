@@ -3,22 +3,22 @@ package com.mprtcz.minesweeper;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.StringJoiner;
 
 /**
  * Created by Azet on 2016-07-14.
  */
-class MinesweeperImpl {
+class MinesweeperImpl implements Minesweeper {
     private char[][] minesArray;
 
-    void setMineField(String mineField) throws IllegalArgumentException {
+    public void setMineField(String mineField) throws IllegalArgumentException {
 
         checkParamCorrectness(getMineFieldLines(mineField));
 
         setMineFieldCharArray(getMineFieldLines(mineField));
-
     }
 
-    String getHintField() throws IllegalStateException {
+    public String getHintField() throws IllegalStateException {
         return generateStringFromCharArray();
     }
 
@@ -29,7 +29,7 @@ class MinesweeperImpl {
     void checkParamCorrectness(String[] mineFieldLines) {
         int lineSize = mineFieldLines[0].length();
 
-        if (mineFieldLines.length < 2 || lineSize < 2) {
+        if (mineFieldLines.length < 1 || lineSize < 1) {
             throw new IllegalArgumentException("Arguments too short");
         }
 
@@ -57,73 +57,63 @@ class MinesweeperImpl {
     }
 
     String generateStringFromCharArray() {
-        StringBuilder stringRepresentation = new StringBuilder();
+        StringJoiner stringJoiner = new StringJoiner("\n", "", "");
 
         if (minesArray == null) {
             throw new IllegalArgumentException("Mine field has not been initialized");
         }
 
         for (int i = 0; i < minesArray.length; i++) {
+            StringBuilder stringRepresentation = new StringBuilder();
             char[] line = minesArray[i];
             for (int j = 0; j < line.length; j++) {
                 stringRepresentation.append(calculateNeighbors(i, j));
-            }
-            stringRepresentation.append("\n");
-        }
-        stringRepresentation.deleteCharAt(stringRepresentation.length() - 1);
 
-        return stringRepresentation.toString();
+            }
+            stringJoiner.add(stringRepresentation);
+        }
+        return stringJoiner.toString();
     }
 
-    private String calculateNeighbors(int i, int j) {
+    private String calculateNeighbors(int x, int y) {
 
-        if (minesArray[i][j] == '*') {
+        if (minesArray[x][y] == '*') {
             return "*";
         }
 
-        List<Coordinates> coordinatesList = getCoordinatesList(i, j);
+        List<Coordinates> coordinatesList = getCoordinatesList(x, y);
 
         int amountOfAdjacentMines = 0;
         for (Coordinates c : coordinatesList) {
             try {
-                if (minesArray[c.getI()][c.getJ()] == '*') {
+                if (minesArray[c.x][c.y] == '*') {
                     amountOfAdjacentMines++;
                 }
-            } catch (IndexOutOfBoundsException ignored) {
-            }
+            } catch (IndexOutOfBoundsException ignored) {}
         }
-
         return String.valueOf(amountOfAdjacentMines);
     }
 
     private class Coordinates {
-        int i;
-        int j;
+        public final int x;
+        public final int y;
 
-        Coordinates(int i, int j) {
-            this.i = i;
-            this.j = j;
-        }
-
-        int getI() {
-            return i;
-        }
-
-        int getJ() {
-            return j;
+        Coordinates(int i, int y) {
+            this.x = i;
+            this.y = y;
         }
     }
 
-    private List<Coordinates> getCoordinatesList(int i, int j) {
+    private List<Coordinates> getCoordinatesList(int x, int y) {
         List<Coordinates> coordinatesList = new ArrayList<>();
-        coordinatesList.add(new Coordinates(i - 1, j - 1));
-        coordinatesList.add(new Coordinates(i, j - 1));
-        coordinatesList.add(new Coordinates(i + 1, j - 1));
-        coordinatesList.add(new Coordinates(i - 1, j));
-        coordinatesList.add(new Coordinates(i + 1, j));
-        coordinatesList.add(new Coordinates(i - 1, j + 1));
-        coordinatesList.add(new Coordinates(i, j + 1));
-        coordinatesList.add(new Coordinates(i + 1, j + 1));
+        coordinatesList.add(new Coordinates(x - 1, y - 1));
+        coordinatesList.add(new Coordinates(x, y - 1));
+        coordinatesList.add(new Coordinates(x + 1, y - 1));
+        coordinatesList.add(new Coordinates(x - 1, y));
+        coordinatesList.add(new Coordinates(x + 1, y));
+        coordinatesList.add(new Coordinates(x - 1, y + 1));
+        coordinatesList.add(new Coordinates(x, y + 1));
+        coordinatesList.add(new Coordinates(x + 1, y + 1));
 
         return coordinatesList;
     }

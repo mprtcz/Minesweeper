@@ -7,7 +7,7 @@ public class App {
 
     public static void main(String[] args) {
         String testString = ".*..\n.*..\n....";
-        MinesweeperImpl m = new MinesweeperImpl();
+        Minesweeper m = new MinesweeperImpl();
         m.setMineField(testString);
         System.out.println(m.toString());
         m.getHintField();
@@ -18,5 +18,4 @@ public class App {
         m.setMineField(testString1);
         System.out.println(m.getHintField());
     }
-
 }
