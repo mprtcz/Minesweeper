@@ -25,7 +25,7 @@ public interface Minesweeper {
      * Example hint-field (for the above input): "*211\n12*1\n0111"
      *
      * @return a string representation of the hint-field
-     * @throws IllegalStateException if the mine-field has not been initialised (x.e. setMineField() has not been called)
+     * @throws IllegalStateException if the mine-field has not been initialised (i.e. setMineField() has not been called)
      */
     String getHintField() throws IllegalStateException;
 }

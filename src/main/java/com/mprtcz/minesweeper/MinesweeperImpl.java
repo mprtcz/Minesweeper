@@ -1,5 +1,7 @@
 package com.mprtcz.minesweeper;
 
+import org.apache.commons.lang3.tuple.ImmutablePair;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -29,7 +31,7 @@ class MinesweeperImpl implements Minesweeper {
     void checkParamCorrectness(String[] mineFieldLines) {
         int lineSize = mineFieldLines[0].length();
 
-        if (mineFieldLines.length < 1 || lineSize < 1) {
+        if (lineSize < 1) {
             throw new IllegalArgumentException("Arguments too short");
         }
 
@@ -57,7 +59,7 @@ class MinesweeperImpl implements Minesweeper {
     }
 
     String generateStringFromCharArray() {
-        StringJoiner stringJoiner = new StringJoiner("\n", "", "");
+        StringJoiner stringJoiner = new StringJoiner("\n");
 
         if (minesArray == null) {
             throw new IllegalArgumentException("Mine field has not been initialized");
@@ -67,8 +69,7 @@ class MinesweeperImpl implements Minesweeper {
             StringBuilder stringRepresentation = new StringBuilder();
             char[] line = minesArray[i];
             for (int j = 0; j < line.length; j++) {
-                stringRepresentation.append(calculateNeighbors(i, j));
-
+                stringRepresentation.append(calculateNeighbors(j, i));
             }
             stringJoiner.add(stringRepresentation);
         }
@@ -76,8 +77,7 @@ class MinesweeperImpl implements Minesweeper {
     }
 
     private String calculateNeighbors(int x, int y) {
-
-        if (minesArray[x][y] == '*') {
+        if (minesArray[y][x] == '*') {
             return "*";
         }
 
@@ -86,10 +86,13 @@ class MinesweeperImpl implements Minesweeper {
         int amountOfAdjacentMines = 0;
         for (Coordinates c : coordinatesList) {
             try {
-                if (minesArray[c.x][c.y] == '*') {
+                if (minesArray[c.y][c.x] == '*') {
                     amountOfAdjacentMines++;
                 }
-            } catch (IndexOutOfBoundsException ignored) {}
+            } catch (IndexOutOfBoundsException e) {
+                System.out.println("Stack trace for c : " +c);
+                e.printStackTrace();
+            }
         }
         return String.valueOf(amountOfAdjacentMines);
     }
@@ -98,23 +101,41 @@ class MinesweeperImpl implements Minesweeper {
         public final int x;
         public final int y;
 
-        Coordinates(int i, int y) {
-            this.x = i;
+        Coordinates(int x, int y) {
+            this.x = x;
             this.y = y;
+        }
+
+        @Override
+        public String toString(){
+            return "x = " +x + " y = " + y +"\n";
         }
     }
 
     private List<Coordinates> getCoordinatesList(int x, int y) {
         List<Coordinates> coordinatesList = new ArrayList<>();
-        coordinatesList.add(new Coordinates(x - 1, y - 1));
-        coordinatesList.add(new Coordinates(x, y - 1));
-        coordinatesList.add(new Coordinates(x + 1, y - 1));
-        coordinatesList.add(new Coordinates(x - 1, y));
-        coordinatesList.add(new Coordinates(x + 1, y));
-        coordinatesList.add(new Coordinates(x - 1, y + 1));
-        coordinatesList.add(new Coordinates(x, y + 1));
-        coordinatesList.add(new Coordinates(x + 1, y + 1));
+
+        List<ImmutablePair<Integer, Integer>> list = new ArrayList<>();
+
+        list.add(new ImmutablePair<>(x - 1, y - 1));
+        list.add(new ImmutablePair<>(x, y - 1));
+        list.add(new ImmutablePair<>(x + 1, y - 1));
+        list.add(new ImmutablePair<>(x - 1, y));
+        list.add(new ImmutablePair<>(x + 1, y));
+        list.add(new ImmutablePair<>(x - 1, y + 1));
+        list.add(new ImmutablePair<>(x, y + 1));
+        list.add(new ImmutablePair<>(x + 1, y + 1));
+
+        for (ImmutablePair<Integer, Integer> pair : list) {
+            if (checkIfCoordinatesAreWithinTheArray(pair.getLeft(), pair.getRight(), minesArray[0].length, minesArray.length)) {
+                coordinatesList.add(new Coordinates(pair.getLeft(), pair.getRight()));
+            }
+        }
 
         return coordinatesList;
+    }
+
+    private static boolean checkIfCoordinatesAreWithinTheArray(int x, int y, int arrayWidth, int arrayHeight) {
+        return !(x > arrayWidth - 1 || x < 0) && !(y > arrayHeight - 1 || y < 0);
     }
 }
