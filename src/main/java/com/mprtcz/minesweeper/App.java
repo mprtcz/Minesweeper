@@ -19,10 +19,10 @@ public class App {
         m.setMineField(testString1);
         System.out.println("Output field:\n\n" +m.getHintField() +"\n");
 
-        String testString2 = ".*..........\n.*.*........\n.....*...*.*......*...\n.*.......**.\n.*.......***\n";
+        String testString2 = ".*..........\n.*.*........\n.....*...*.*\n........*...\n.*.......**.\n.*.......***\n";
 
-        System.out.println("Input String:\n\n" + testString1+"\n");
-        m.setMineField(testString1);
+        System.out.println("Input String:\n\n" + testString2+"\n");
+        m.setMineField(testString2);
         System.out.println("Output field: \n\n" +m.getHintField() +"\n");
     }
 }

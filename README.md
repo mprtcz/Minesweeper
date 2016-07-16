@@ -4,7 +4,7 @@ A java application which displays hint field for a given minesweeper mine field 
 
 Sample output for this application:
 
-![output](https://sc-cdn.scaleengine.net/i/a1a44ebdedc84114cfceed9ac7c707c7.png)
+![output](https://sc-cdn.scaleengine.net/i/ceeb4c5bf178097cec3532b6f7c31eb2.png)
 
 To generate a jar file of this project using maven:
   1. after cloning the project, open terminal in the project's main directory and type:
