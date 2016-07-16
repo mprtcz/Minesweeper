@@ -7,16 +7,22 @@ public class App {
 
     public static void main(String[] args) {
         String testString = ".*..\n.*..\n....";
-        System.out.println("testString :\n" + testString);
+        System.out.println("Input String:\n\n" + testString+"\n");
         Minesweeper m = new MinesweeperImpl();
         m.setMineField(testString);
-        System.out.println("Output field: \n" +m.getHintField() +"\n");
+        System.out.println("Output field:\n\n" +m.getHintField() +"\n");
 
 
         String testString1 = ".*.....\n.**....\n......*";
 
-        System.out.println("testString1 :\n" + testString1);
+        System.out.println("Input String:\n\n" + testString1+"\n");
         m.setMineField(testString1);
-        System.out.println("Output field: \n" +m.getHintField() +"\n");
+        System.out.println("Output field:\n\n" +m.getHintField() +"\n");
+
+        String testString2 = ".*..........\n.*.*........\n.....*...*.*......*...\n.*.......**.\n.*.......***\n";
+
+        System.out.println("Input String:\n\n" + testString1+"\n");
+        m.setMineField(testString1);
+        System.out.println("Output field: \n\n" +m.getHintField() +"\n");
     }
 }
