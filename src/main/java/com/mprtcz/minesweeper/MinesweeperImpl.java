@@ -29,16 +29,20 @@ class MinesweeperImpl implements Minesweeper {
     }
 
     void checkParamCorrectness(String[] mineFieldLines) {
-        int lineSize = mineFieldLines[0].length();
+        if(mineFieldLines.length!=0) {
+            int lineSize = mineFieldLines[0].length();
 
-        if (lineSize < 1) {
-            throw new IllegalArgumentException("Arguments too short");
-        }
-
-        for (String s : mineFieldLines) {
-            if (s.length() != lineSize) {
-                throw new IllegalArgumentException("Number of arguments not equal for every line.");
+            if (lineSize < 1) {
+                throw new IllegalArgumentException("Arguments too short");
             }
+
+            for (String s : mineFieldLines) {
+                if (s.length() != lineSize) {
+                    throw new IllegalArgumentException("Number of arguments not equal for every line.");
+                }
+            }
+        } else {
+            throw new IllegalArgumentException("Arguments too short");
         }
     }
 
@@ -65,11 +69,11 @@ class MinesweeperImpl implements Minesweeper {
             throw new IllegalArgumentException("Mine field has not been initialized");
         }
 
-        for (int i = 0; i < minesArray.length; i++) {
+        for (int x = 0; x < minesArray.length; x++) {
             StringBuilder stringRepresentation = new StringBuilder();
-            char[] line = minesArray[i];
-            for (int j = 0; j < line.length; j++) {
-                stringRepresentation.append(calculateNeighbors(j, i));
+            char[] line = minesArray[x];
+            for (int y = 0; y < line.length; y++) {
+                stringRepresentation.append(calculateNeighbors(y, x));
             }
             stringJoiner.add(stringRepresentation);
         }
@@ -85,13 +89,8 @@ class MinesweeperImpl implements Minesweeper {
 
         int amountOfAdjacentMines = 0;
         for (Coordinates c : coordinatesList) {
-            try {
-                if (minesArray[c.y][c.x] == '*') {
-                    amountOfAdjacentMines++;
-                }
-            } catch (IndexOutOfBoundsException e) {
-                System.out.println("Stack trace for c : " +c);
-                e.printStackTrace();
+            if (minesArray[c.y][c.x] == '*') {
+                amountOfAdjacentMines++;
             }
         }
         return String.valueOf(amountOfAdjacentMines);
@@ -107,14 +106,13 @@ class MinesweeperImpl implements Minesweeper {
         }
 
         @Override
-        public String toString(){
-            return "x = " +x + " y = " + y +"\n";
+        public String toString() {
+            return "x = " + x + " y = " + y + "\n";
         }
     }
 
     private List<Coordinates> getCoordinatesList(int x, int y) {
         List<Coordinates> coordinatesList = new ArrayList<>();
-
         List<ImmutablePair<Integer, Integer>> list = new ArrayList<>();
 
         list.add(new ImmutablePair<>(x - 1, y - 1));
